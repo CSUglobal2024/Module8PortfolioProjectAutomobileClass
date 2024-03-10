@@ -1,11 +1,5 @@
 package com.option1.automobile;
 
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 class Automobile {
     private String make;
     private String model;
@@ -23,6 +17,15 @@ class Automobile {
         this.color = color;
         this.year = year;
         this.mileage = mileage;
+    }
+
+    // Getters for make and model
+    public String getMake() {
+        return make;
+    }
+
+    public String getModel() {
+        return model;
     }
 
     // Method to add a new vehicle
@@ -76,6 +79,10 @@ class Automobile {
             return "Failed to update vehicle attributes: " + e.getMessage();
         }
     }
+
+    // Override toString method to display vehicle information
+    @Override
+    public String toString() {
+        return "Make: " + make + ", Model: " + model + ", Color: " + color + ", Year: " + year + ", Mileage: " + mileage;
+    }
 }
-
-

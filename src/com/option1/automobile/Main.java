@@ -2,69 +2,108 @@ package com.option1.automobile;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        ArrayList<Automobile> inventory = new ArrayList<>(); // ArrayList to store Automobile objects
+        Scanner scanner = new Scanner(System.in);
+
         try {
-            Automobile automobile = new Automobile("Toyota", "Camry", "Red", 2020, 5000);
-            
-            // List initial vehicle information
-            System.out.println("Initial Vehicle Information:");
-            String[] initialInfo = automobile.listVehicleInformation();
-            for (String info : initialInfo) {
-                System.out.println(info);
-            }
+            while (true) {
+                // Display menu options
+                System.out.println("Menu:");
+                System.out.println("1. Add a car");
+                System.out.println("2. Remove a car");
+                System.out.println("3. Display all cars");
+                System.out.println("4. Search for a car");
+                System.out.println("5. Exit");
 
-            // Remove vehicle
-            System.out.println(automobile.removeVehicle());
+                // Prompt user for choice
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline character
 
-            // Add a new vehicle
-            System.out.println(automobile.addVehicle("Honda", "Accord", "Blue", 2019, 8000));
+                switch (choice) {
+                    case 1: // Add a car
+                        System.out.println("Enter make, model, color, year, and mileage of the car:");
+                        System.out.print("Make: ");
+                        String make = scanner.nextLine();
+                        System.out.print("Model: ");
+                        String model = scanner.nextLine();
+                        System.out.print("Color: ");
+                        String color = scanner.nextLine();
+                        System.out.print("Year: ");
+                        int year = scanner.nextInt();
+                        System.out.print("Mileage: ");
+                        int mileage = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline character
+                        Automobile newCar = new Automobile(make, model, color, year, mileage);
+                        inventory.add(newCar);
+                        System.out.println("Car added successfully.");
+                        break;
 
-            // List new vehicle information
-            System.out.println("\nNew Vehicle Information:");
-            String[] newInfo = automobile.listVehicleInformation();
-            for (String info : newInfo) {
-                System.out.println(info);
-            }
+                    case 2: // Remove a car
+                        System.out.println("Enter make and model of the car to remove:");
+                        System.out.print("Make: ");
+                        String removeMake = scanner.nextLine();
+                        System.out.print("Model: ");
+                        String removeModel = scanner.nextLine();
+                        boolean removed = false;
+                        for (Automobile car : inventory) {
+                            if (car.getMake().equalsIgnoreCase(removeMake) && car.getModel().equalsIgnoreCase(removeModel)) {
+                                inventory.remove(car);
+                                System.out.println("Car removed successfully.");
+                                removed = true;
+                                break;
+                            }
+                        }
+                        if (!removed) {
+                            System.out.println("Car not found in inventory.");
+                        }
+                        break;
 
-            // Update vehicle
-            System.out.println(automobile.updateVehicleAttributes("Ford", "Fusion", "Silver", 2018, 10000));
+                    case 3: // Display all cars
+                        System.out.println("Inventory:");
+                        for (Automobile car : inventory) {
+                            System.out.println(car);
+                        }
+                        break;
 
-            // List updated vehicle information
-            System.out.println("\nUpdated Vehicle Information:");
-            String[] updatedInfo = automobile.listVehicleInformation();
-            for (String info : updatedInfo) {
-                System.out.println(info);
-            }
+                    case 4: // Search for a car
+                        System.out.println("Enter make and model of the car to search:");
+                        System.out.print("Make: ");
+                        String searchMake = scanner.nextLine();
+                        System.out.print("Model: ");
+                        String searchModel = scanner.nextLine();
+                        boolean found = false;
+                        for (Automobile car : inventory) {
+                            if (car.getMake().equalsIgnoreCase(searchMake) && car.getModel().equalsIgnoreCase(searchModel)) {
+                                System.out.println("Car found:");
+                                System.out.println(car);
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            System.out.println("Car not found in inventory.");
+                        }
+                        break;
 
-            // Prompt user to print information to a file
-            System.out.println("\nDo you want to print the information to a file? (Y/N)");
-            Scanner scanner = new Scanner(System.in);
-            String response = scanner.nextLine().trim();
+                    case 5: // Exit
+                        System.out.println("Exiting program.");
+                        scanner.close();
+                        return;
 
-            if (response.equalsIgnoreCase("Y")) {
-                printToFile(updatedInfo);
-                System.out.println("Information printed to file successfully.");
-            } else {
-                System.out.println("File printing cancelled.");
+                    default:
+                        System.out.println("Invalid choice. Please enter a number between 1 and 5.");
+                }
             }
         } catch (Exception e) {
             System.out.println("Error occurred: " + e.getMessage());
-        }
-    }
-
-    // Method to print information to a file
-    public static void printToFile(String[] info) {
-        try {
-            FileWriter writer = new FileWriter("C:\\Temp\\Autos.txt");
-            for (String line : info) {
-                writer.write(line + "\n");
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("Error occurred while printing to file: " + e.getMessage());
+        } finally {
+            scanner.close();
         }
     }
 }
